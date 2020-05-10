@@ -1,8 +1,9 @@
-
+import datetime
 import os
 import xlwt
 
-folder = '//cvispacs/lumedxarchive'
+folder = 'c:/test'
+# folder = '//cvispacs/lumedxarchive'
 wbk = xlwt.Workbook()
 sheet = wbk.add_sheet('python')
 font0 = xlwt.Font()
@@ -26,10 +27,15 @@ style0.font = font0
 
 sheet.write(0, 0, "File Name", style0)
 sheet.write(0, 1, "Size", style0)
+sheet.write(0, 2, "Date/Time Created", style0)
 
 
 # sheet.write(0, 2, "Destination", style0)
 # sheet.write(0, 3, "Port", style0)
+
+def modification_date(filename):
+    t = os.path.getmtime(filename)
+    return datetime.datetime.fromtimestamp(t)
 
 
 def get_size_format(b, factor=1024, suffix="B"):
@@ -57,15 +63,19 @@ def read_file_func(path):
             for f in dirs:
                 x = os.path.basename(f)
                 y = (os.path.join(root, f))
+                created = os.path.getctime(y)
+                dt = datetime.datetime.fromtimestamp(created)
                 t = sum(os.path.getsize(os.path.join(dirpath, filename)) for dirpath, dirnames, filenames in
                         os.walk(y)
                         for filename in filenames)
                 folder_size_format = get_size_format(t)
-                print(x, ' - ', folder_size_format)
+                print(x, ' - ', folder_size_format, ' - ', dt)
                 row += 1
                 sheet.write(row, 0, x)
-                wbk.save('folder.size.xls')
                 sheet.write(row, 1, folder_size_format)
+                sheet.write(row, 2, dt)
+
+    wbk.save('folder.size.xls')
 
 
 read_file_func(folder)

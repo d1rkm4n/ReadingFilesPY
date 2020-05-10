@@ -2,7 +2,7 @@ import os
 import xlwt
 import datetime
 
-folder = '//cvispacs/archive'
+folder = 'q:'
 wbk = xlwt.Workbook()
 sheet = wbk.add_sheet('python')
 font0 = xlwt.Font()
@@ -66,7 +66,7 @@ def read_file_func(path):
                 sheet.write(row, 0, x)
                 sheet.write(row, 1, folder_size_format)
                 sheet.write(row, 2, dt)
+    wbk.save('CVISPACS-Target for F: Folder K Drive.xls')
 
-    wbk.save('CVISPACS-ARCHIVE_FOLDER.xls')
 
 read_file_func(folder)
